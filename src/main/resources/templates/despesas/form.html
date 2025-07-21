@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Formulário Despesa</title></head>
+<head>
+    <title>Nova Despesa</title>
+</head>
 <body>
-<h1 th:text="${despesa.id} == null ? 'Nova Despesa' : 'Editar Despesa'"></h1>
-
-<form th:action="@{${despesa.id} == null ? '/despesas' : '/despesas/editar/' + ${despesa.id}}" th:object="${despesa}" method="post">
+<h1>Nova Despesa</h1>
+<form th:action="@{/despesas/salvar}" th:object="${despesa}" method="post">
     <label>Descrição:</label>
-    <input type="text" th:field="*{descricao}" required/>
-    <br/>
-    <label>Valor (€):</label>
-    <input type="number" step="0.01" th:field="*{valor}" required/>
-    <br/>
+    <input type="text" th:field="*{descricao}" required /><br/>
+    <label>Valor:</label>
+    <input type="number" th:field="*{valor}" step="0.01" required /><br/>
     <label>Data:</label>
-    <input type="date" th:field="*{data}" required/>
-    <br/>
+    <input type="date" th:field="*{data}" required /><br/>
+    <label>Categoria:</label>
+    <select th:field="*{categoria.id}">
+        <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nome}"></option>
+    </select><br/>
     <button type="submit">Guardar</button>
 </form>
 </body>

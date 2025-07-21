@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Receitas</title></head>
+<head>
+    <title>Receitas</title>
+</head>
 <body>
 <h1>Receitas</h1>
-<a href="/receitas/nova">Nova Receita</a>
-<table border="1" cellpadding="5">
-    <tr><th>Descrição</th><th>Valor (€)</th><th>Data</th><th>Ações</th></tr>
+<a th:href="@{/receitas/nova}">Nova Receita</a>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Data</th>
+        <th>Categoria</th>
+    </tr>
+    </thead>
+    <tbody>
     <tr th:each="r : ${receitas}">
         <td th:text="${r.descricao}"></td>
         <td th:text="${r.valor}"></td>
         <td th:text="${r.data}"></td>
-        <td>
-            <a th:href="@{'/receitas/editar/' + ${r.id}}">Editar</a> |
-            <a th:href="@{'/receitas/apagar/' + ${r.id}}" onclick="return confirm('Apagar receita?');">Apagar</a>
-        </td>
+        <td th:text="${r.categoria != null ? r.categoria.nome : 'Sem categoria'}"></td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>

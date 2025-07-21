@@ -1,6 +1,7 @@
 package com.example.gestorfinanceiro.controller;
 
 import com.example.gestorfinanceiro.model.Despesa;
+import com.example.gestorfinanceiro.repository.CategoriaRepository;
 import com.example.gestorfinanceiro.repository.DespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,41 +15,28 @@ public class DespesaController {
     @Autowired
     private DespesaRepository despesaRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     @GetMapping
-    public String listar(Model model) {
+    public String listarDespesas(Model model) {
         model.addAttribute("despesas", despesaRepository.findAll());
         return "despesas/list";
     }
 
     @GetMapping("/nova")
-    public String novaForm(Model model) {
+    public String novaDespesaForm(Model model) {
         model.addAttribute("despesa", new Despesa());
+        model.addAttribute("categorias", categoriaRepository.findAll());
         return "despesas/form";
     }
 
-    @PostMapping
-    public String salvar(@ModelAttribute Despesa despesa) {
+    @PostMapping("/salvar")
+    public String salvarDespesa(@ModelAttribute Despesa despesa) {
+        if (despesa.getCategoria() == null || despesa.getCategoria().getId() == null) {
+            throw new RuntimeException("Categoria inválida!");
+        }
         despesaRepository.save(despesa);
-        return "redirect:/despesas";
-    }
-
-    @GetMapping("/editar/{id}")
-    public String editarForm(@PathVariable Long id, Model model) {
-        Despesa d = despesaRepository.findById(id).orElseThrow();
-        model.addAttribute("despesa", d);
-        return "despesas/form";
-    }
-
-    @PostMapping("/editar/{id}")
-    public String atualizar(@PathVariable Long id, @ModelAttribute Despesa despesa) {
-        despesa.setId(id);
-        despesaRepository.save(despesa);
-        return "redirect:/despesas";
-    }
-
-    @GetMapping("/apagar/{id}")
-    public String apagar(@PathVariable Long id) {
-        despesaRepository.deleteById(id);
         return "redirect:/despesas";
     }
 }

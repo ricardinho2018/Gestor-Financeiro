@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Página Principal</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Resumo Financeiro</h1>
+<p><strong>Total de Receitas:</strong> <span th:text="${totalReceitas}">0.00</span> €</p>
+<p><strong>Total de Despesas:</strong> <span th:text="${totalDespesas}">0.00</span> €</p>
+<p><strong>Saldo:</strong> <span th:text="${saldo}">0.00</span> €</p>
+
+<hr>
+<a href="/receitas">Ver Receitas</a> |
+<a href="/despesas">Ver Despesas</a> |
+<a href="/categorias">Ver Categorias</a>
+</body>
+</html>

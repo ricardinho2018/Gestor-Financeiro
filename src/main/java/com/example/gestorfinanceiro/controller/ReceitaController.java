@@ -1,6 +1,7 @@
 package com.example.gestorfinanceiro.controller;
 
 import com.example.gestorfinanceiro.model.Receita;
+import com.example.gestorfinanceiro.repository.CategoriaRepository;
 import com.example.gestorfinanceiro.repository.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,41 +15,28 @@ public class ReceitaController {
     @Autowired
     private ReceitaRepository receitaRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     @GetMapping
-    public String listar(Model model) {
+    public String listarReceitas(Model model) {
         model.addAttribute("receitas", receitaRepository.findAll());
         return "receitas/list";
     }
 
     @GetMapping("/nova")
-    public String novaForm(Model model) {
+    public String novaReceitaForm(Model model) {
         model.addAttribute("receita", new Receita());
+        model.addAttribute("categorias", categoriaRepository.findAll());
         return "receitas/form";
     }
 
-    @PostMapping
-    public String salvar(@ModelAttribute Receita receita) {
+    @PostMapping("/salvar")
+    public String salvarReceita(@ModelAttribute Receita receita) {
+        if (receita.getCategoria() == null || receita.getCategoria().getId() == null) {
+            throw new RuntimeException("Categoria inválida!");
+        }
         receitaRepository.save(receita);
-        return "redirect:/receitas";
-    }
-
-    @GetMapping("/editar/{id}")
-    public String editarForm(@PathVariable Long id, Model model) {
-        Receita r = receitaRepository.findById(id).orElseThrow();
-        model.addAttribute("receita", r);
-        return "receitas/form";
-    }
-
-    @PostMapping("/editar/{id}")
-    public String atualizar(@PathVariable Long id, @ModelAttribute Receita receita) {
-        receita.setId(id);
-        receitaRepository.save(receita);
-        return "redirect:/receitas";
-    }
-
-    @GetMapping("/apagar/{id}")
-    public String apagar(@PathVariable Long id) {
-        receitaRepository.deleteById(id);
         return "redirect:/receitas";
     }
 }
