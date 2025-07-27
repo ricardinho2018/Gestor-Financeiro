@@ -1,7 +1,6 @@
 package com.example.gestorfinanceiro.controller;
 
 import com.example.gestorfinanceiro.model.Despesa;
-import com.example.gestorfinanceiro.repository.CategoriaRepository;
 import com.example.gestorfinanceiro.repository.DespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +14,6 @@ public class DespesaController {
     @Autowired
     private DespesaRepository despesaRepository;
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
-
     @GetMapping
     public String listarDespesas(Model model) {
         model.addAttribute("despesas", despesaRepository.findAll());
@@ -27,15 +23,11 @@ public class DespesaController {
     @GetMapping("/nova")
     public String novaDespesaForm(Model model) {
         model.addAttribute("despesa", new Despesa());
-        model.addAttribute("categorias", categoriaRepository.findAll());
         return "despesas/form";
     }
 
-    @PostMapping("/salvar")
+    @PostMapping
     public String salvarDespesa(@ModelAttribute Despesa despesa) {
-        if (despesa.getCategoria() == null || despesa.getCategoria().getId() == null) {
-            throw new RuntimeException("Categoria inválida!");
-        }
         despesaRepository.save(despesa);
         return "redirect:/despesas";
     }

@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Despesas</title>
-</head>
+<head><title>Despesas</title></head>
 <body>
 <h1>Despesas</h1>
-<a th:href="@{/despesas/nova}">Nova Despesa</a>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Descrição</th>
-        <th>Valor</th>
-        <th>Data</th>
-        <th>Categoria</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="d : ${despesas}">
-        <td th:text="${d.descricao}"></td>
-        <td th:text="${d.valor}"></td>
-        <td th:text="${d.data}"></td>
-        <td th:text="${d.categoria != null ? d.categoria.nome : 'Sem categoria'}"></td>
-    </tr>
-    </tbody>
-</table>
+<a href="/despesas/nova">Nova Receita</a>
+<ul>
+    <li th:each="r : ${despesas}">
+        <span th:text="${d.descricao}"></span> -
+        <span th:text="${d.valor}"></span> €
+        (<span th:text="${d.data}"></span>)
+    </li>
+</ul>
 </body>
 </html>
